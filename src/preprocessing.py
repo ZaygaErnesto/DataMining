@@ -11,6 +11,7 @@ get_models           Return a dict of classifier instances.
 
 from __future__ import annotations
 
+import inspect
 import logging
 from typing import Any
 
@@ -146,14 +147,19 @@ def get_models(
     rf_params = config.get("random_forest", {})
     xgb_params = config.get("xgboost", {})
 
+    lr_kwargs: dict[str, Any] = {
+        "max_iter": lr_params.get("max_iter", 1000),
+        "solver": lr_params.get("solver", "lbfgs"),
+        "class_weight": lr_params.get("class_weight", "balanced"),
+        "random_state": random_state,
+    }
+    if "multi_class" in inspect.signature(LogisticRegression).parameters:
+        lr_kwargs["multi_class"] = lr_params.get(
+            "multi_class", "multinomial"
+        )
+
     models: dict[str, Any] = {
-        "logistic_regression": LogisticRegression(
-            max_iter=lr_params.get("max_iter", 1000),
-            solver=lr_params.get("solver", "lbfgs"),
-            multi_class=lr_params.get("multi_class", "multinomial"),
-            class_weight=lr_params.get("class_weight", "balanced"),
-            random_state=random_state,
-        ),
+        "logistic_regression": LogisticRegression(**lr_kwargs),
         "random_forest": RandomForestClassifier(
             n_estimators=rf_params.get("n_estimators", 200),
             max_depth=rf_params.get("max_depth", 10),

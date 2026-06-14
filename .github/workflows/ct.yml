@@ -38,6 +38,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Ensure training dataset exists
+        run: |
+          if [ ! -f data/ai4i2020.csv ]; then
+            mkdir -p data
+            curl -fL --retry 3 --retry-delay 2 \
+              "https://archive.ics.uci.edu/ml/machine-learning-databases/00601/ai4i2020.csv" \
+              -o data/ai4i2020.csv
+          fi
+
       - name: Run training
         run: |
           python -m src.train --config ${{ inputs.config_path || 'configs/config.yaml' }}
