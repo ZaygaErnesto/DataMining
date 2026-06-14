@@ -110,7 +110,8 @@ def get_samplers(
     Returns
     -------
     dict[str, Any]
-        ``{'none': None, 'smote': SMOTE(...), 'borderline_smote': BorderlineSMOTE(...), 'smote_tomek': SMOTETomek(...)}``.
+        ``{'none': None, 'smote': SMOTE(...), 'borderline_smote': BorderlineSMOTE(...),``
+        ``'smote_tomek': SMOTETomek(...)}``.
     """
     return {
         "none": None,

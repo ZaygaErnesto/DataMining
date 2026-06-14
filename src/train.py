@@ -103,9 +103,7 @@ def run_ablation(
 
     # Samplers & models
     samplers = get_samplers(random_state=random_state)
-    model_dict = get_models(
-        config=config.get("models"), random_state=random_state
-    )
+    model_dict = get_models(config=config.get("models"), random_state=random_state)
 
     # ---- Ablation grid ------------------------------------------------
     results: list[dict[str, Any]] = []
@@ -222,6 +220,7 @@ def train_single(
     fit_params = {}
     if type(model).__name__ == "XGBClassifier" and sampler is None:
         from sklearn.utils.class_weight import compute_sample_weight
+
         sample_weights = compute_sample_weight(class_weight="balanced", y=y_train)
         fit_params["classifier__sample_weight"] = sample_weights
 
@@ -299,9 +298,7 @@ if __name__ == "__main__":
         format="%(asctime)s | %(name)s | %(levelname)s | %(message)s",
     )
 
-    parser = argparse.ArgumentParser(
-        description="Run the full ablation study."
-    )
+    parser = argparse.ArgumentParser(description="Run the full ablation study.")
     parser.add_argument(
         "--config",
         type=str,

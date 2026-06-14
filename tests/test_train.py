@@ -13,7 +13,6 @@ from src.train import train_single, save_best_model
 from src.predict import load_model
 from src.preprocessing import build_preprocessor
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -24,15 +23,17 @@ def synthetic_dataset():
     """Create a very small synthetic dataset (50 rows) for fast testing."""
     np.random.seed(42)
     rows = 50
-    X = pd.DataFrame({
-        "Type": np.random.choice(["L", "M", "H"], size=rows),
-        "Air temperature [K]": np.random.uniform(295.0, 300.0, size=rows),
-        "Process temperature [K]": np.random.uniform(305.0, 310.0, size=rows),
-        "Rotational speed [rpm]": np.random.uniform(1100, 2000, size=rows),
-        "Torque [Nm]": np.random.uniform(10.0, 70.0, size=rows),
-        "Tool wear [min]": np.random.randint(0, 250, size=rows),
-        "Temperature Difference": np.random.uniform(5.0, 10.0, size=rows),
-    })
+    X = pd.DataFrame(
+        {
+            "Type": np.random.choice(["L", "M", "H"], size=rows),
+            "Air temperature [K]": np.random.uniform(295.0, 300.0, size=rows),
+            "Process temperature [K]": np.random.uniform(305.0, 310.0, size=rows),
+            "Rotational speed [rpm]": np.random.uniform(1100, 2000, size=rows),
+            "Torque [Nm]": np.random.uniform(10.0, 70.0, size=rows),
+            "Tool wear [min]": np.random.randint(0, 250, size=rows),
+            "Temperature Difference": np.random.uniform(5.0, 10.0, size=rows),
+        }
+    )
     y = np.random.choice([0, 1], size=rows)
     return X, y
 
@@ -56,8 +57,10 @@ def dummy_pipeline():
 def test_train_single_returns_metrics(synthetic_dataset):
     """train_single should return a dict with standard metric keys."""
     X, y = synthetic_dataset
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+
     preprocessor = build_preprocessor(X_train)
     model = LogisticRegression(max_iter=300, random_state=42)
     class_names = ["No Failure", "Failure"]
@@ -81,9 +84,9 @@ def test_train_single_returns_metrics(synthetic_dataset):
     )
     # All metric values should be between 0 and 1
     for key in expected_keys:
-        assert 0.0 <= metrics[key] <= 1.0, (
-            f"Metric '{key}' out of range: {metrics[key]}"
-        )
+        assert (
+            0.0 <= metrics[key] <= 1.0
+        ), f"Metric '{key}' out of range: {metrics[key]}"
 
 
 # ---------------------------------------------------------------------------

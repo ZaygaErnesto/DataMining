@@ -5,10 +5,10 @@ from fastapi.testclient import TestClient
 
 from src.app import app
 
-
 # ---------------------------------------------------------------------------
 # Client Fixture
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def client():
@@ -19,6 +19,7 @@ def client():
 # ---------------------------------------------------------------------------
 # Test Cases
 # ---------------------------------------------------------------------------
+
 
 def test_home_endpoint_renders_html(client):
     """GET / should render the dashboard HTML."""
@@ -54,7 +55,7 @@ def test_predict_endpoint_diagnoses_telemetry(client):
         "Process temperature [K]": 308.6,
         "Rotational speed [rpm]": 1551.0,
         "Torque [Nm]": 42.8,
-        "Tool wear [min]": 0.0
+        "Tool wear [min]": 0.0,
     }
     response = client.post("/api/predict", json=payload)
     # If the model artifact is loaded it will return 200
