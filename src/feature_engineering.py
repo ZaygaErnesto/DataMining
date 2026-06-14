@@ -74,9 +74,7 @@ def engineer_features(X: pd.DataFrame) -> pd.DataFrame:
     X["Temperature difference [K]"] = (
         X["Process temperature [K]"] - X["Air temperature [K]"]
     )
-    X["Temperature ratio"] = (
-        X["Process temperature [K]"] / X["Air temperature [K]"]
-    )
+    X["Temperature ratio"] = X["Process temperature [K]"] / X["Air temperature [K]"]
 
     # Guard against zero rotational speed
     rot_speed = X["Rotational speed [rpm]"].replace(0, np.nan)
@@ -88,18 +86,14 @@ def engineer_features(X: pd.DataFrame) -> pd.DataFrame:
     tool_wear_torque = X["Tool wear [min]"] * X["Torque [Nm]"]
     X["Tool wear torque"] = tool_wear_torque
 
-    X["Tool wear speed"] = (
-        X["Tool wear [min]"] * X["Rotational speed [rpm]"]
-    )
+    X["Tool wear speed"] = X["Tool wear [min]"] * X["Rotational speed [rpm]"]
 
     # --- Binary risk flags ---------------------------------------------
     temp_diff = X["Temperature difference [K]"]
     speed = X["Rotational speed [rpm]"]
     tool_wear = X["Tool wear [min]"]
 
-    X["Heat dissipation risk"] = (
-        (temp_diff <= 8.6) & (speed < 1380)
-    ).astype(int)
+    X["Heat dissipation risk"] = ((temp_diff <= 8.6) & (speed < 1380)).astype(int)
 
     X["Low power risk"] = (power < 3500).astype(int)
     X["High power risk"] = (power > 9000).astype(int)
@@ -109,27 +103,18 @@ def engineer_features(X: pd.DataFrame) -> pd.DataFrame:
     type_col = X["Type"] if "Type" in X.columns else None
     if type_col is not None:
         overstrain = np.zeros(len(X), dtype=int)
-        overstrain[
-            (type_col == "L") & (tool_wear_torque > 11_000)
-        ] = 1
-        overstrain[
-            (type_col == "M") & (tool_wear_torque > 12_000)
-        ] = 1
-        overstrain[
-            (type_col == "H") & (tool_wear_torque > 13_000)
-        ] = 1
+        overstrain[(type_col == "L") & (tool_wear_torque > 11_000)] = 1
+        overstrain[(type_col == "M") & (tool_wear_torque > 12_000)] = 1
+        overstrain[(type_col == "H") & (tool_wear_torque > 13_000)] = 1
         X["Overstrain risk"] = overstrain
     else:
         # Fallback when Type column is absent (e.g. already encoded)
         X["Overstrain risk"] = (tool_wear_torque > 12_000).astype(int)
         logger.warning(
-            "'Type' column not found — using single threshold for "
-            "Overstrain risk."
+            "'Type' column not found — using single threshold for " "Overstrain risk."
         )
 
-    logger.info(
-        "Engineered features added. Final feature count: %d", X.shape[1]
-    )
+    logger.info("Engineered features added. Final feature count: %d", X.shape[1])
     return X
 
 

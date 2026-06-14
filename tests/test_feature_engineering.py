@@ -6,24 +6,26 @@ import numpy as np
 
 from src.feature_engineering import engineer_features, get_feature_sets
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def sample_df():
     """Create a basic raw dataframe matching the expected features."""
     np.random.seed(42)
     rows = 30
-    return pd.DataFrame({
-        "Type": np.random.choice(["L", "M", "H"], size=rows),
-        "Air temperature [K]": np.random.uniform(295.0, 300.0, size=rows),
-        "Process temperature [K]": np.random.uniform(305.0, 310.0, size=rows),
-        "Rotational speed [rpm]": np.random.uniform(1100, 2000, size=rows),
-        "Torque [Nm]": np.random.uniform(10.0, 70.0, size=rows),
-        "Tool wear [min]": np.random.randint(0, 250, size=rows),
-    })
+    return pd.DataFrame(
+        {
+            "Type": np.random.choice(["L", "M", "H"], size=rows),
+            "Air temperature [K]": np.random.uniform(295.0, 300.0, size=rows),
+            "Process temperature [K]": np.random.uniform(305.0, 310.0, size=rows),
+            "Rotational speed [rpm]": np.random.uniform(1100, 2000, size=rows),
+            "Torque [Nm]": np.random.uniform(10.0, 70.0, size=rows),
+            "Tool wear [min]": np.random.randint(0, 250, size=rows),
+        }
+    )
 
 
 @pytest.fixture
@@ -56,6 +58,7 @@ EXPECTED_NEW_COLUMNS = [
 # ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
+
 
 def test_engineer_features_output_columns(sample_df):
     """engineer_features should add all the 11 expected new columns."""
@@ -96,7 +99,9 @@ def test_risk_flags(sample_df):
     ]
     for col in risk_cols:
         values = result[col].unique()
-        assert set(values).issubset({0, 1}), f"Risk column '{col}' has unexpected values: {values}"
+        assert set(values).issubset(
+            {0, 1}
+        ), f"Risk column '{col}' has unexpected values: {values}"
 
 
 def test_get_feature_sets_returns_both(sample_df):

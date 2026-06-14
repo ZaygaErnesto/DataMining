@@ -1,9 +1,6 @@
 """Tests for model quality gates (src.evaluate.check_quality_gates)."""
 
-import pytest
-
 from src.evaluate import check_quality_gates
-
 
 # ---------------------------------------------------------------------------
 # Tests — quality gate logic
@@ -31,9 +28,9 @@ def test_quality_gate_fails_f1():
     passed, message = check_quality_gates(metrics)
     assert passed is False, "Quality gate should have failed on low f1_macro"
     joined_msg = " ".join(message).lower()
-    assert "f1_macro" in joined_msg or "f1" in joined_msg, (
-        f"Failure message should mention f1_macro. Got: {message}"
-    )
+    assert (
+        "f1_macro" in joined_msg or "f1" in joined_msg
+    ), f"Failure message should mention f1_macro. Got: {message}"
 
 
 def test_quality_gate_fails_balanced_accuracy():
@@ -44,10 +41,8 @@ def test_quality_gate_fails_balanced_accuracy():
         "balanced_accuracy": 0.35,  # well below any reasonable threshold
     }
     passed, message = check_quality_gates(metrics)
-    assert passed is False, (
-        "Quality gate should have failed on low balanced_accuracy"
-    )
+    assert passed is False, "Quality gate should have failed on low balanced_accuracy"
     joined_msg = " ".join(message).lower()
-    assert "balanced_accuracy" in joined_msg or "balanced" in joined_msg, (
-        f"Failure message should mention balanced_accuracy. Got: {message}"
-    )
+    assert (
+        "balanced_accuracy" in joined_msg or "balanced" in joined_msg
+    ), f"Failure message should mention balanced_accuracy. Got: {message}"

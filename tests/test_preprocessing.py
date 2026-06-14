@@ -7,24 +7,26 @@ from sklearn.compose import ColumnTransformer
 
 from src.preprocessing import build_preprocessor, get_samplers, get_models
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def sample_df():
     """Create a basic raw dataframe matching features needed for preprocessor."""
     np.random.seed(42)
     rows = 50
-    return pd.DataFrame({
-        "Type": np.random.choice(["L", "M", "H"], size=rows),
-        "Air temperature [K]": np.random.uniform(295.0, 300.0, size=rows),
-        "Process temperature [K]": np.random.uniform(305.0, 310.0, size=rows),
-        "Rotational speed [rpm]": np.random.uniform(1100, 2000, size=rows),
-        "Torque [Nm]": np.random.uniform(10.0, 70.0, size=rows),
-        "Tool wear [min]": np.random.randint(0, 250, size=rows),
-    })
+    return pd.DataFrame(
+        {
+            "Type": np.random.choice(["L", "M", "H"], size=rows),
+            "Air temperature [K]": np.random.uniform(295.0, 300.0, size=rows),
+            "Process temperature [K]": np.random.uniform(305.0, 310.0, size=rows),
+            "Rotational speed [rpm]": np.random.uniform(1100, 2000, size=rows),
+            "Torque [Nm]": np.random.uniform(10.0, 70.0, size=rows),
+            "Tool wear [min]": np.random.randint(0, 250, size=rows),
+        }
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -58,9 +60,9 @@ def test_get_samplers_returns_dict():
     samplers = get_samplers()
     assert isinstance(samplers, dict)
     expected_keys = {"none", "smote", "borderline_smote", "smote_tomek"}
-    assert set(samplers.keys()) == expected_keys, (
-        f"Expected keys {expected_keys}, got {set(samplers.keys())}"
-    )
+    assert (
+        set(samplers.keys()) == expected_keys
+    ), f"Expected keys {expected_keys}, got {set(samplers.keys())}"
     # 'none' should map to None (no resampling)
     assert samplers["none"] is None
 
@@ -75,9 +77,9 @@ def test_get_models_returns_dict():
     models = get_models()
     assert isinstance(models, dict)
     expected_keys = {"logistic_regression", "random_forest", "xgboost"}
-    assert set(models.keys()) == expected_keys, (
-        f"Expected keys {expected_keys}, got {set(models.keys())}"
-    )
+    assert (
+        set(models.keys()) == expected_keys
+    ), f"Expected keys {expected_keys}, got {set(models.keys())}"
     # Each value should be an estimator-like object with fit/predict
     for name, model in models.items():
         assert hasattr(model, "fit"), f"Model '{name}' has no fit method"

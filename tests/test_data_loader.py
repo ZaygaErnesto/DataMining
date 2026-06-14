@@ -11,7 +11,6 @@ from src.data_loader import (
     validate_data,
 )
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -141,7 +140,16 @@ def test_create_target_multiple_failures(sample_df):
 # ---------------------------------------------------------------------------
 
 
-COLUMNS_TO_DROP = ["UDI", "Product ID", "Machine failure", "TWF", "HDF", "PWF", "OSF", "RNF"]
+COLUMNS_TO_DROP = [
+    "UDI",
+    "Product ID",
+    "Machine failure",
+    "TWF",
+    "HDF",
+    "PWF",
+    "OSF",
+    "RNF",
+]
 
 
 def test_prepare_features_drops_correct_columns(sample_df):

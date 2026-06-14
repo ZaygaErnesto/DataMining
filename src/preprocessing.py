@@ -111,7 +111,8 @@ def get_samplers(
     Returns
     -------
     dict[str, Any]
-        ``{'none': None, 'smote': SMOTE(...), 'borderline_smote': BorderlineSMOTE(...), 'smote_tomek': SMOTETomek(...)}``.
+        ``{'none': None, 'smote': SMOTE(...), 'borderline_smote':
+        BorderlineSMOTE(...), 'smote_tomek': SMOTETomek(...)}``.
     """
     return {
         "none": None,
@@ -154,9 +155,7 @@ def get_models(
         "random_state": random_state,
     }
     if "multi_class" in inspect.signature(LogisticRegression).parameters:
-        lr_kwargs["multi_class"] = lr_params.get(
-            "multi_class", "multinomial"
-        )
+        lr_kwargs["multi_class"] = lr_params.get("multi_class", "multinomial")
 
     models: dict[str, Any] = {
         "logistic_regression": LogisticRegression(**lr_kwargs),

@@ -104,9 +104,7 @@ def check_quality_gates(
     min_f1 = thresholds.get("min_f1_macro", 0.60)
     actual_f1 = metrics.get("f1_macro", 0.0)
     if actual_f1 < min_f1:
-        messages.append(
-            f"FAIL: f1_macro={actual_f1:.4f} < threshold={min_f1:.4f}"
-        )
+        messages.append(f"FAIL: f1_macro={actual_f1:.4f} < threshold={min_f1:.4f}")
 
     # --- Balanced accuracy gate ---
     min_ba = thresholds.get("min_balanced_accuracy", 0.65)
@@ -139,9 +137,7 @@ def generate_report(
     out.mkdir(parents=True, exist_ok=True)
 
     # --- ablation_results.csv ---
-    results_df = pd.DataFrame(results).sort_values(
-        "f1_macro", ascending=False
-    )
+    results_df = pd.DataFrame(results).sort_values("f1_macro", ascending=False)
     results_df.to_csv(out / "ablation_results.csv", index=False)
 
     # --- per_class_metrics.csv ---
@@ -165,9 +161,7 @@ def generate_report(
                     }
                 )
     if per_class_rows:
-        pd.DataFrame(per_class_rows).to_csv(
-            out / "per_class_metrics.csv", index=False
-        )
+        pd.DataFrame(per_class_rows).to_csv(out / "per_class_metrics.csv", index=False)
 
     # --- best_confusion_matrix.csv ---
     cm = best_result.get("confusion_matrix", [])
@@ -229,9 +223,7 @@ if __name__ == "__main__":
 
     models_dir = Path(config.get("output", {}).get("models_dir", "models"))
     metrics_dir = Path(config.get("output", {}).get("metrics_dir", "metrics"))
-    processed_dir = Path(
-        config.get("paths", {}).get("processed_dir", "data/processed")
-    )
+    processed_dir = Path(config.get("paths", {}).get("processed_dir", "data/processed"))
 
     # Load test data
     X_test = pd.read_csv(processed_dir / "X_test.csv")
@@ -246,7 +238,10 @@ if __name__ == "__main__":
     feature_set_name = metadata.get("feature_set", "raw")
     if feature_set_name == "engineered":
         from src.feature_engineering import engineer_features
-        print("Model trained on engineered features. Applying feature engineering to input data...")
+
+        print(
+            "Model trained on engineered features. Applying feature engineering to input data..."
+        )
         X_test = engineer_features(X_test)
 
     class_names = metadata.get("class_names", [])
