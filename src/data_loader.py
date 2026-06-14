@@ -49,10 +49,9 @@ FAILURE_MAP: dict[str, str] = {
     "HDF": "Heat Dissipation Failure",
     "PWF": "Power Failure",
     "OSF": "Overstrain Failure",
-    "RNF": "Random Failures",
 }
 
-BINARY_FAILURE_COLS: list[str] = ["TWF", "HDF", "PWF", "OSF", "RNF"]
+BINARY_FAILURE_COLS: list[str] = ["TWF", "HDF", "PWF", "OSF"]
 
 DROP_COLUMNS: list[str] = [
     "UDI",
@@ -110,12 +109,6 @@ def load_dataset(path: str | Path) -> pd.DataFrame:
 def create_target(df: pd.DataFrame) -> pd.DataFrame:
     """Create the multi-class ``Failure Type`` column.
 
-    Logic
-    -----
-    * ``failure_count == 0`` → ``'No Failure'``
-    * ``failure_count == 1`` → specific failure name
-    * ``failure_count > 1``  → ``'Multiple Failures'``
-
     Parameters
     ----------
     df : pd.DataFrame
@@ -128,23 +121,27 @@ def create_target(df: pd.DataFrame) -> pd.DataFrame:
         A copy of *df* with a new ``Failure Type`` column appended.
     """
     df = df.copy()
-    failure_count = df[BINARY_FAILURE_COLS].sum(axis=1)
 
-    def _map_row(row: pd.Series, count: int) -> str:
-        if count == 0:
-            return "No Failure"
-        if count > 1:
-            return "Multiple Failures"
-        # Exactly one failure — find which one
-        for col, name in FAILURE_MAP.items():
-            if row[col] == 1:
-                return name
-        return "No Failure"  # fallback (should not happen)
+    # Drop contradictory rows: Machine failure is 1 but all failure indicators are 0
+    inconsistent_mask = (df["Machine failure"] == 1) & (df[["TWF", "HDF", "PWF", "OSF", "RNF"]].sum(axis=1) == 0)
+    if inconsistent_mask.any():
+        logger.info(
+            "Dropping %d contradictory rows where Machine failure=1 but all failure indicators are 0",
+            inconsistent_mask.sum()
+        )
+        df = df[~inconsistent_mask].reset_index(drop=True)
 
-    df["Failure Type"] = [
-        _map_row(df.iloc[i], failure_count.iloc[i])
-        for i in range(len(df))
-    ]
+    # Relevant columns for failure types (excluding RNF as it doesn't cause Machine failure)
+    relevant_cols = ["TWF", "HDF", "PWF", "OSF"]
+    failure_count = df[relevant_cols].sum(axis=1)
+    df["Failure Type"] = "No Failure"
+
+    # Map classes based on Machine failure and failure indicators
+    for col, name in FAILURE_MAP.items():
+        df.loc[(df["Machine failure"] == 1) & (df[col] == 1) & (failure_count == 1), "Failure Type"] = name
+
+    df.loc[(df["Machine failure"] == 1) & (failure_count > 1), "Failure Type"] = "Multiple Failures"
+    df.loc[(df["Machine failure"] == 1) & (failure_count == 0), "Failure Type"] = "Multiple Failures" # fallback
 
     logger.info(
         "Target distribution:\n%s",

@@ -218,7 +218,14 @@ def train_single(
     steps.append(("classifier", model))
 
     pipeline = ImbPipeline(steps=steps)
-    pipeline.fit(X_train, y_train)
+
+    fit_params = {}
+    if type(model).__name__ == "XGBClassifier" and sampler is None:
+        from sklearn.utils.class_weight import compute_sample_weight
+        sample_weights = compute_sample_weight(class_weight="balanced", y=y_train)
+        fit_params["classifier__sample_weight"] = sample_weights
+
+    pipeline.fit(X_train, y_train, **fit_params)
 
     elapsed = time.time() - start
 
@@ -344,5 +351,5 @@ if __name__ == "__main__":
     print("\n[SUCCESS] Ablation study complete.")
     print(
         f"   Best: {best['feature_set']} | {best['sampler']} | "
-        f"{best['model']}  →  balanced_accuracy={best['balanced_accuracy']:.4f}"
+        f"{best['model']}  ->  balanced_accuracy={best['balanced_accuracy']:.4f}"
     )

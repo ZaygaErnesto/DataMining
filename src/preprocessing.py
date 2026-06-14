@@ -17,7 +17,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 from imblearn.combine import SMOTETomek
-from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import SMOTE, BorderlineSMOTE
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
@@ -99,7 +99,7 @@ def build_preprocessor(X_train: pd.DataFrame) -> ColumnTransformer:
 
 def get_samplers(
     random_state: int = RANDOM_STATE,
-) -> dict[str, SMOTE | SMOTETomek | None]:
+) -> dict[str, Any]:
     """Return a dictionary of imblearn samplers for ablation.
 
     Parameters
@@ -109,12 +109,13 @@ def get_samplers(
 
     Returns
     -------
-    dict[str, SMOTE | SMOTETomek | None]
-        ``{'none': None, 'smote': SMOTE(...), 'smote_tomek': SMOTETomek(...)}``.
+    dict[str, Any]
+        ``{'none': None, 'smote': SMOTE(...), 'borderline_smote': BorderlineSMOTE(...), 'smote_tomek': SMOTETomek(...)}``.
     """
     return {
         "none": None,
         "smote": SMOTE(random_state=random_state),
+        "borderline_smote": BorderlineSMOTE(random_state=random_state),
         "smote_tomek": SMOTETomek(random_state=random_state),
     }
 

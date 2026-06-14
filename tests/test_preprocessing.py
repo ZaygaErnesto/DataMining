@@ -57,7 +57,7 @@ def test_get_samplers_returns_dict():
     """get_samplers should return a dict with keys 'none', 'smote', 'smote_tomek'."""
     samplers = get_samplers()
     assert isinstance(samplers, dict)
-    expected_keys = {"none", "smote", "smote_tomek"}
+    expected_keys = {"none", "smote", "borderline_smote", "smote_tomek"}
     assert set(samplers.keys()) == expected_keys, (
         f"Expected keys {expected_keys}, got {set(samplers.keys())}"
     )
