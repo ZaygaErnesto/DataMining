@@ -9,7 +9,7 @@ on:
         default: "configs/config.yaml"
 
   push:
-    branches: [main]
+    branches: [main, master]
     paths:
       - "data/**"
       - "configs/**"
