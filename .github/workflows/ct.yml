@@ -43,9 +43,20 @@ jobs:
           mkdir -p data
           curl -Lo data/ai4i2020.csv https://archive.ics.uci.edu/ml/machine-learning-databases/00601/ai4i2020.csv
 
+      - name: Run data loader
+        run: |
+          python -m src.data_loader --config ${{ inputs.config_path || 'configs/config.yaml' }}
+
       - name: Run training
         run: |
           python -m src.train --config ${{ inputs.config_path || 'configs/config.yaml' }}
+
+      - name: Upload processed data
+        uses: actions/upload-artifact@v4
+        with:
+          name: processed-data
+          path: data/processed/
+          retention-days: 30
 
       - name: Upload model artifacts
         uses: actions/upload-artifact@v4
@@ -90,6 +101,12 @@ jobs:
         with:
           name: training-metrics
           path: metrics/
+
+      - name: Download processed data
+        uses: actions/download-artifact@v4
+        with:
+          name: processed-data
+          path: data/processed/
 
       - name: Run quality gate evaluation
         run: python -m src.evaluate
