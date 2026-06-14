@@ -57,7 +57,7 @@ def test_train_single_returns_metrics(synthetic_dataset):
     """train_single should return a dict with standard metric keys."""
     X, y = synthetic_dataset
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
+
     preprocessor = build_preprocessor(X_train)
     model = LogisticRegression(max_iter=300, random_state=42)
     class_names = ["No Failure", "Failure"]

@@ -110,7 +110,8 @@ def get_samplers(
     Returns
     -------
     dict[str, Any]
-        ``{'none': None, 'smote': SMOTE(...), 'borderline_smote': BorderlineSMOTE(...), 'smote_tomek': SMOTETomek(...)}``.
+        Dictionary mapping sampler names to imblearn samplers (e.g.,
+        'none', 'smote', 'borderline_smote', 'smote_tomek').
     """
     return {
         "none": None,

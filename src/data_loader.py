@@ -18,7 +18,6 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import numpy as np
 import pandas as pd
 import yaml
 
@@ -141,7 +140,7 @@ def create_target(df: pd.DataFrame) -> pd.DataFrame:
         df.loc[(df["Machine failure"] == 1) & (df[col] == 1) & (failure_count == 1), "Failure Type"] = name
 
     df.loc[(df["Machine failure"] == 1) & (failure_count > 1), "Failure Type"] = "Multiple Failures"
-    df.loc[(df["Machine failure"] == 1) & (failure_count == 0), "Failure Type"] = "Multiple Failures" # fallback
+    df.loc[(df["Machine failure"] == 1) & (failure_count == 0), "Failure Type"] = "Multiple Failures"  # fallback
 
     logger.info(
         "Target distribution:\n%s",
@@ -248,7 +247,7 @@ if __name__ == "__main__":
 
     # 3. Validate
     report = validate_data(df)
-    
+
     # Save validation report
     with open(processed_dir / "validation_report.json", "w", encoding="utf-8") as fh:
         json.dump(report, fh, indent=2)
@@ -276,4 +275,3 @@ if __name__ == "__main__":
     pd.Series(y_test, name="Failure Type").to_csv(processed_dir / "y_test.csv", index=False)
 
     print(f"\n[SUCCESS] Split data saved to {processed_dir}/")
-

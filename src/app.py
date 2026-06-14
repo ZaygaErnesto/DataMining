@@ -14,7 +14,6 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
-from typing import Any
 
 import joblib
 import pandas as pd
@@ -58,7 +57,7 @@ try:
         METADATA = json.load(f)
     FEATURE_SET = METADATA.get("feature_set", "raw")
     CLASS_NAMES = METADATA.get("class_names", [])
-    
+
     LE_PATH = MODELS_DIR / "label_encoder.joblib"
     LABEL_ENCODER = joblib.load(LE_PATH) if LE_PATH.exists() else None
     logger.info("Successfully loaded ML model artifacts.")
@@ -118,7 +117,7 @@ async def get_metrics():
 
     with open(metrics_file, "r") as f:
         metrics_data = json.load(f)
-    
+
     return metrics_data
 
 
@@ -150,7 +149,7 @@ async def predict_telemetry(payload: TelemetryRequest):
 
         # Run prediction
         pred_code = PIPELINE.predict(input_df)[0]
-        
+
         # Decode target integer class code back to target label string
         if LABEL_ENCODER is not None:
             pred_label = LABEL_ENCODER.inverse_transform([pred_code])[0]

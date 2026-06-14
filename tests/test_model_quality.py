@@ -1,7 +1,5 @@
 """Tests for model quality gates (src.evaluate.check_quality_gates)."""
 
-import pytest
-
 from src.evaluate import check_quality_gates
 
 
