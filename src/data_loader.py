@@ -98,9 +98,7 @@ def load_dataset(path: str | Path) -> pd.DataFrame:
 
     missing_cols = set(EXPECTED_COLUMNS) - set(df.columns)
     if missing_cols:
-        raise ValueError(
-            f"Missing expected columns: {sorted(missing_cols)}"
-        )
+        raise ValueError(f"Missing expected columns: {sorted(missing_cols)}")
 
     return df
 
@@ -122,11 +120,13 @@ def create_target(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
 
     # Drop contradictory rows: Machine failure is 1 but all failure indicators are 0
-    inconsistent_mask = (df["Machine failure"] == 1) & (df[["TWF", "HDF", "PWF", "OSF", "RNF"]].sum(axis=1) == 0)
+    inconsistent_mask = (df["Machine failure"] == 1) & (
+        df[["TWF", "HDF", "PWF", "OSF", "RNF"]].sum(axis=1) == 0
+    )
     if inconsistent_mask.any():
         logger.info(
             "Dropping %d contradictory rows where Machine failure=1 but all failure indicators are 0",
-            inconsistent_mask.sum()
+            inconsistent_mask.sum(),
         )
         df = df[~inconsistent_mask].reset_index(drop=True)
 
@@ -137,10 +137,17 @@ def create_target(df: pd.DataFrame) -> pd.DataFrame:
 
     # Map classes based on Machine failure and failure indicators
     for col, name in FAILURE_MAP.items():
-        df.loc[(df["Machine failure"] == 1) & (df[col] == 1) & (failure_count == 1), "Failure Type"] = name
+        df.loc[
+            (df["Machine failure"] == 1) & (df[col] == 1) & (failure_count == 1),
+            "Failure Type",
+        ] = name
 
-    df.loc[(df["Machine failure"] == 1) & (failure_count > 1), "Failure Type"] = "Multiple Failures"
-    df.loc[(df["Machine failure"] == 1) & (failure_count == 0), "Failure Type"] = "Multiple Failures"  # fallback
+    df.loc[(df["Machine failure"] == 1) & (failure_count > 1), "Failure Type"] = (
+        "Multiple Failures"
+    )
+    df.loc[(df["Machine failure"] == 1) & (failure_count == 0), "Failure Type"] = (
+        "Multiple Failures"  # fallback
+    )
 
     logger.info(
         "Target distribution:\n%s",
@@ -200,9 +207,7 @@ def validate_data(df: pd.DataFrame) -> dict[str, Any]:
     }
 
     if "Failure Type" in df.columns:
-        report["class_distribution"] = (
-            df["Failure Type"].value_counts().to_dict()
-        )
+        report["class_distribution"] = df["Failure Type"].value_counts().to_dict()
 
     logger.info("Validation report: %s", json.dumps(report, indent=2))
     return report
@@ -271,7 +276,11 @@ if __name__ == "__main__":
     # 6. Save split files
     X_train.to_csv(processed_dir / "X_train.csv", index=False)
     X_test.to_csv(processed_dir / "X_test.csv", index=False)
-    pd.Series(y_train, name="Failure Type").to_csv(processed_dir / "y_train.csv", index=False)
-    pd.Series(y_test, name="Failure Type").to_csv(processed_dir / "y_test.csv", index=False)
+    pd.Series(y_train, name="Failure Type").to_csv(
+        processed_dir / "y_train.csv", index=False
+    )
+    pd.Series(y_test, name="Failure Type").to_csv(
+        processed_dir / "y_test.csv", index=False
+    )
 
     print(f"\n[SUCCESS] Split data saved to {processed_dir}/")

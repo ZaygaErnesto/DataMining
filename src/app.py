@@ -74,12 +74,24 @@ except Exception as e:
 # Pydantic Request Schema
 # ------------------------------------------------------------------ #
 class TelemetryRequest(BaseModel):
-    machine_type: str = Field(..., alias="Type", description="Machine product type (L, M, H)")
-    air_temp: float = Field(..., alias="Air temperature [K]", description="Air Temperature in Kelvin")
-    process_temp: float = Field(..., alias="Process temperature [K]", description="Process Temperature in Kelvin")
-    rotational_speed: float = Field(..., alias="Rotational speed [rpm]", description="Rotational Speed in RPM")
+    machine_type: str = Field(
+        ..., alias="Type", description="Machine product type (L, M, H)"
+    )
+    air_temp: float = Field(
+        ..., alias="Air temperature [K]", description="Air Temperature in Kelvin"
+    )
+    process_temp: float = Field(
+        ...,
+        alias="Process temperature [K]",
+        description="Process Temperature in Kelvin",
+    )
+    rotational_speed: float = Field(
+        ..., alias="Rotational speed [rpm]", description="Rotational Speed in RPM"
+    )
     torque: float = Field(..., alias="Torque [Nm]", description="Torque in Nm")
-    tool_wear: float = Field(..., alias="Tool wear [min]", description="Tool Wear in minutes")
+    tool_wear: float = Field(
+        ..., alias="Tool wear [min]", description="Tool Wear in minutes"
+    )
 
     class Config:
         populate_by_name = True
@@ -99,10 +111,13 @@ class TelemetryRequest(BaseModel):
 # Route Handlers
 # ------------------------------------------------------------------ #
 
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """Render the dashboard HTML interface."""
-    return templates.TemplateResponse(request, "index.html", {"class_names": CLASS_NAMES})
+    return templates.TemplateResponse(
+        request, "index.html", {"class_names": CLASS_NAMES}
+    )
 
 
 @app.get("/api/metrics")
@@ -111,8 +126,7 @@ async def get_metrics():
     metrics_file = METRICS_DIR / "metrics.json"
     if not metrics_file.exists():
         return JSONResponse(
-            status_code=404,
-            content={"detail": "Metrics report not generated yet."}
+            status_code=404, content={"detail": "Metrics report not generated yet."}
         )
 
     with open(metrics_file, "r") as f:
@@ -127,7 +141,7 @@ async def predict_telemetry(payload: TelemetryRequest):
     if PIPELINE is None:
         raise HTTPException(
             status_code=503,
-            detail="Machine learning model is not loaded/available on server."
+            detail="Machine learning model is not loaded/available on server.",
         )
 
     # Convert request payload to DataFrame matching expected structure
@@ -145,6 +159,7 @@ async def predict_telemetry(payload: TelemetryRequest):
         # Conditionally apply feature engineering
         if FEATURE_SET == "engineered":
             from src.feature_engineering import engineer_features
+
             input_df = engineer_features(input_df)
 
         # Run prediction
@@ -154,7 +169,11 @@ async def predict_telemetry(payload: TelemetryRequest):
         if LABEL_ENCODER is not None:
             pred_label = LABEL_ENCODER.inverse_transform([pred_code])[0]
         else:
-            pred_label = CLASS_NAMES[pred_code] if pred_code < len(CLASS_NAMES) else str(pred_code)
+            pred_label = (
+                CLASS_NAMES[pred_code]
+                if pred_code < len(CLASS_NAMES)
+                else str(pred_code)
+            )
 
         return {
             "prediction": pred_label,
@@ -167,4 +186,5 @@ async def predict_telemetry(payload: TelemetryRequest):
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run("src.app:app", host="127.0.0.1", port=8000, reload=True)
