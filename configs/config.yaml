@@ -1,0 +1,44 @@
+# =============================================================================
+# Machine Failure Classification — Configuration
+# =============================================================================
+
+project:
+  random_state: 42
+  test_size: 0.2
+
+paths:
+  raw_data: "data/ai4i2020.csv"
+  processed_dir: "data/processed"
+  reports_dir: "metrics"
+  models_dir: "models"
+
+output:
+  models_dir: "models"
+  metrics_dir: "metrics"
+
+# Model hyperparameters
+models:
+  logistic_regression:
+    max_iter: 3000
+    class_weight: "balanced"
+  random_forest:
+    n_estimators: 300
+    max_depth: 16
+    min_samples_leaf: 2
+    class_weight: "balanced_subsample"
+    n_jobs: -1
+  xgboost:
+    n_estimators: 300
+    max_depth: 5
+    learning_rate: 0.05
+    subsample: 0.9
+    colsample_bytree: 0.9
+    objective: "multi:softprob"
+    eval_metric: "mlogloss"
+    tree_method: "hist"
+    n_jobs: -1
+
+# Quality gates
+quality_gates:
+  min_f1_macro: 0.60
+  min_balanced_accuracy: 0.65

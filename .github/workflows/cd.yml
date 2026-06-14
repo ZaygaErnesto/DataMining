@@ -1,0 +1,99 @@
+name: CD — Continuous Deployment
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Package Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Package model for release
+        run: |
+          mkdir -p release/models release/src
+          if [ -d "models" ]; then
+            cp -r models/* release/models/ 2>/dev/null || echo "No model files to copy"
+          fi
+          cp -r src/* release/src/
+          cp requirements.txt release/ 2>/dev/null || true
+          cp configs/config.yaml release/ 2>/dev/null || true
+          cd release && tar -czf ../release-package.tar.gz . && cd ..
+          echo "Release package created."
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-package
+          path: release-package.tar.gz
+          retention-days: 90
+
+  release:
+    name: Create GitHub Release
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-package
+          path: .
+
+      - name: Determine release tag
+        id: tag
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "tag_name=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag_name=release-$(date -u +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.tag.outputs.tag_name }}"
+          echo "Creating release for tag: ${TAG}"
+          gh release create "${TAG}" \
+            release-package.tar.gz \
+            --title "Release ${TAG}" \
+            --notes "## 🚀 Release ${TAG}
+
+          **Commit:** \`${{ github.sha }}\`
+          **Date:** $(date -u +'%Y-%m-%d %H:%M UTC')
+
+          ### Contents
+          - Trained model artifacts
+          - Source code (src/)
+          - Configuration files
+          - Requirements
+
+          ### Usage
+          \`\`\`bash
+          tar -xzf release-package.tar.gz
+          pip install -r requirements.txt
+          python -m src.train --config config.yaml
+          \`\`\`
+          " \
+            --latest

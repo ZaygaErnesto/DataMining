@@ -1,0 +1,18 @@
+# DVC parameters (linked to configs/config.yaml)
+data:
+  path: "data/ai4i2020.csv"
+  test_size: 0.2
+  random_state: 42
+
+train:
+  feature_sets:
+    - raw
+    - engineered
+  samplers:
+    - none
+    - smote
+    - smote_tomek
+
+quality_gates:
+  min_f1_macro: 0.60
+  min_balanced_accuracy: 0.65

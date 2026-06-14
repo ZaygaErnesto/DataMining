@@ -1,0 +1,61 @@
+# =============================================================================
+# DVC Pipeline — Machine Failure Classification
+# =============================================================================
+
+stages:
+  prepare:
+    cmd: python -m src.data_loader --config configs/config.yaml
+    deps:
+      - data/ai4i2020.csv
+      - src/data_loader.py
+      - configs/config.yaml
+    params:
+      - data.path
+      - data.test_size
+      - data.random_state
+    outs:
+      - data/processed/X_train.csv
+      - data/processed/X_test.csv
+      - data/processed/y_train.csv
+      - data/processed/y_test.csv
+      - data/processed/validation_report.json
+
+  train:
+    cmd: python -m src.train --config configs/config.yaml
+    deps:
+      - data/processed/X_train.csv
+      - data/processed/X_test.csv
+      - data/processed/y_train.csv
+      - data/processed/y_test.csv
+      - src/train.py
+      - src/feature_engineering.py
+      - src/preprocessing.py
+      - configs/config.yaml
+    params:
+      - train.feature_sets
+      - train.samplers
+    outs:
+      - models/best_model.joblib
+      - models/best_model_metadata.json
+    metrics:
+      - metrics/metrics.json:
+          cache: false
+
+  evaluate:
+    cmd: python -m src.evaluate --config configs/config.yaml
+    deps:
+      - models/best_model.joblib
+      - models/best_model_metadata.json
+      - data/processed/X_test.csv
+      - data/processed/y_test.csv
+      - src/evaluate.py
+    params:
+      - quality_gates.min_f1_macro
+      - quality_gates.min_balanced_accuracy
+    metrics:
+      - metrics/evaluation.json:
+          cache: false
+    outs:
+      - metrics/ablation_results.csv
+      - metrics/per_class_metrics.csv
+      - metrics/best_confusion_matrix.csv

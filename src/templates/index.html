@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Maintenance Telemetry Dashboard</title>
+    <!-- Outfit Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h1 class="glow-text">Predictive Maintenance</h1>
+            <p class="subtitle">AI4I 2020 Machine Failure Classification Dashboard</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Left Panel: Input Telemetry Form -->
+            <section class="panel glass-card form-panel">
+                <h2 class="panel-title">Telemetry Sensor Inputs</h2>
+                <form id="prediction-form" class="telemetry-form">
+                    
+                    <!-- Machine Type Dropdown -->
+                    <div class="form-group">
+                        <label for="machine_type">Machine Type (Quality Grade)</label>
+                        <select name="Type" id="machine_type" required>
+                            <option value="L">Low (L)</option>
+                            <option value="M" selected>Medium (M)</option>
+                            <option value="H">High (H)</option>
+                        </select>
+                    </div>
+
+                    <!-- Air Temperature Slider -->
+                    <div class="form-group">
+                        <div class="slider-header">
+                            <label for="air_temp">Air Temperature [K]</label>
+                            <span class="value-badge" id="air_temp_val">298.1</span>
+                        </div>
+                        <input type="range" name="Air temperature [K]" id="air_temp" min="295.0" max="305.0" step="0.1" value="298.1">
+                    </div>
+
+                    <!-- Process Temperature Slider -->
+                    <div class="form-group">
+                        <div class="slider-header">
+                            <label for="process_temp">Process Temperature [K]</label>
+                            <span class="value-badge" id="process_temp_val">308.6</span>
+                        </div>
+                        <input type="range" name="Process temperature [K]" id="process_temp" min="305.0" max="315.0" step="0.1" value="308.6">
+                    </div>
+
+                    <!-- Rotational Speed Slider -->
+                    <div class="form-group">
+                        <div class="slider-header">
+                            <label for="rotational_speed">Rotational Speed [rpm]</label>
+                            <span class="value-badge" id="rotational_speed_val">1550</span>
+                        </div>
+                        <input type="range" name="Rotational speed [rpm]" id="rotational_speed" min="1100" max="2900" step="5" value="1550">
+                    </div>
+
+                    <!-- Torque Slider -->
+                    <div class="form-group">
+                        <div class="slider-header">
+                            <label for="torque">Torque [Nm]</label>
+                            <span class="value-badge" id="torque_val">42.8</span>
+                        </div>
+                        <input type="range" name="Torque [Nm]" id="torque" min="3.0" max="80.0" step="0.1" value="42.8">
+                    </div>
+
+                    <!-- Tool Wear Slider -->
+                    <div class="form-group">
+                        <div class="slider-header">
+                            <label for="tool_wear">Tool Wear [min]</label>
+                            <span class="value-badge" id="tool_wear_val">0</span>
+                        </div>
+                        <input type="range" name="Tool wear [min]" id="tool_wear" min="0" max="255" step="1" value="0">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="btn-submit">
+                        <span class="btn-text">Analyze Telemetry</span>
+                        <div class="spinner" id="btn-spinner"></div>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right Panel: Results & Metrics -->
+            <div class="right-column">
+                <!-- Result Display Panel -->
+                <section class="panel glass-card result-panel" id="result-card">
+                    <h2 class="panel-title">Diagnostic Output</h2>
+                    <div class="result-placeholder" id="placeholder-text">
+                        <div class="sensor-pulse"></div>
+                        <p>Submit telemetry telemetry readings to trigger classification.</p>
+                    </div>
+                    <div class="result-content hidden" id="result-display">
+                        <p class="result-label">Identified Status</p>
+                        <h3 class="result-value" id="prediction-result">No Failure</h3>
+                        <div class="status-indicator-bar" id="indicator-bar"></div>
+                        <p class="feature-set-info">Engineered features computed dynamically: <strong id="fs-badge">raw</strong></p>
+                    </div>
+                </section>
+
+                <!-- Model Stats & Metrics Panel -->
+                <section class="panel glass-card metrics-panel">
+                    <h2 class="panel-title">Best Model Performance</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <span class="metric-name">Balanced Accuracy</span>
+                            <span class="metric-number" id="metric-ba">0.00%</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-name">Macro F1-Score</span>
+                            <span class="metric-number" id="metric-f1">0.00%</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-name">Overall Accuracy</span>
+                            <span class="metric-number" id="metric-acc">0.00%</span>
+                        </div>
+                    </div>
+                    <div class="ablation-context">
+                        <p>Classifier: <span class="highlight-cyan" id="best-model-name">Random Forest</span></p>
+                        <p>Sampler: <span class="highlight-cyan" id="best-sampler-name">SMOTE</span></p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript Logic -->
+    <script src="/static/main.js"></script>
+</body>
+</html>

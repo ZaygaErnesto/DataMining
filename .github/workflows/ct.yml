@@ -1,0 +1,148 @@
+name: CT — Continuous Training
+
+on:
+  workflow_dispatch:
+    inputs:
+      config_path:
+        description: "Path to training configuration file"
+        required: false
+        default: "configs/config.yaml"
+
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "configs/**"
+
+  schedule:
+    - cron: "0 0 * * 0"  # Weekly: Sunday at midnight UTC
+
+permissions:
+  contents: write
+
+jobs:
+  train:
+    name: Train Models
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run training
+        run: |
+          python -m src.train --config ${{ inputs.config_path || 'configs/config.yaml' }}
+
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: trained-models
+          path: models/
+          retention-days: 30
+
+      - name: Upload metrics artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: training-metrics
+          path: metrics/
+          retention-days: 30
+
+  evaluate:
+    name: Evaluate & Quality Gate
+    needs: train
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download model artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: trained-models
+          path: models/
+
+      - name: Download metrics artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: training-metrics
+          path: metrics/
+
+      - name: Run quality gate evaluation
+        run: python -m src.evaluate
+
+      - name: Upload evaluation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-report
+          path: metrics/evaluation_report.*
+          retention-days: 30
+
+  register:
+    name: Register Model
+    needs: evaluate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download model artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: trained-models
+          path: models/
+
+      - name: Download metrics artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: training-metrics
+          path: metrics/
+
+      - name: Create training summary
+        run: |
+          echo "## 🏋️ Training Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Metrics" >> $GITHUB_STEP_SUMMARY
+          if [ -f metrics/results.json ]; then
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat metrics/results.json >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Metrics file not found." >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- Models uploaded as \`trained-models\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Metrics uploaded as \`training-metrics\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Tag commit if quality gates passed
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          TAG_NAME="model-$(date -u +'%Y%m%d')-${SHORT_SHA}"
+          echo "Tagging commit as ${TAG_NAME}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "${TAG_NAME}" -m "Auto-tagged after successful training and quality gate"
+          git push origin "${TAG_NAME}"
