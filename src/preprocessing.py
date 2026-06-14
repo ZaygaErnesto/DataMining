@@ -147,14 +147,19 @@ def get_models(
     rf_params = config.get("random_forest", {})
     xgb_params = config.get("xgboost", {})
 
+    logistic_regression_kwargs = {
+        "max_iter": lr_params.get("max_iter", 1000),
+        "solver": lr_params.get("solver", "lbfgs"),
+        "class_weight": lr_params.get("class_weight", "balanced"),
+        "random_state": random_state,
+    }
+    if "multi_class" in LogisticRegression().get_params():
+        logistic_regression_kwargs["multi_class"] = lr_params.get(
+            "multi_class", "multinomial"
+        )
+
     models: dict[str, Any] = {
-        "logistic_regression": LogisticRegression(
-            max_iter=lr_params.get("max_iter", 1000),
-            solver=lr_params.get("solver", "lbfgs"),
-            multi_class=lr_params.get("multi_class", "multinomial"),
-            class_weight=lr_params.get("class_weight", "balanced"),
-            random_state=random_state,
-        ),
+        "logistic_regression": LogisticRegression(**logistic_regression_kwargs),
         "random_forest": RandomForestClassifier(
             n_estimators=rf_params.get("n_estimators", 200),
             max_depth=rf_params.get("max_depth", 10),
