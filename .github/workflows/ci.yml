@@ -75,6 +75,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Download dataset
+        run: |
+          mkdir -p data
+          curl -Lo data/ai4i2020.csv https://archive.ics.uci.edu/ml/machine-learning-databases/00601/ai4i2020.csv
+
       - name: Validate data
         run: |
           python -c "

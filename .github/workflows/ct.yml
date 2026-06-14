@@ -38,6 +38,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Download dataset
+        run: |
+          mkdir -p data
+          curl -Lo data/ai4i2020.csv https://archive.ics.uci.edu/ml/machine-learning-databases/00601/ai4i2020.csv
+
       - name: Run training
         run: |
           python -m src.train --config ${{ inputs.config_path || 'configs/config.yaml' }}
