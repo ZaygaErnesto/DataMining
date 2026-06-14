@@ -151,7 +151,6 @@ def get_models(
         "logistic_regression": LogisticRegression(
             max_iter=lr_params.get("max_iter", 1000),
             solver=lr_params.get("solver", "lbfgs"),
-            multi_class=lr_params.get("multi_class", "multinomial"),
             class_weight=lr_params.get("class_weight", "balanced"),
             random_state=random_state,
         ),
