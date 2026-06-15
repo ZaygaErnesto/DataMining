@@ -1,0 +1,145 @@
+feature_set,sampler,model,class,precision,recall,f1_score,support
+raw,none,logistic_regression,Heat Dissipation Failure,0.22727272727272727,0.9523809523809523,0.3669724770642202,21.0
+raw,none,logistic_regression,Multiple Failures,0.25,0.5,0.3333333333333333,4.0
+raw,none,logistic_regression,No Failure,1.0,0.8468701500258665,0.9170868347338935,1933.0
+raw,none,logistic_regression,Overstrain Failure,0.32558139534883723,0.875,0.4745762711864407,16.0
+raw,none,logistic_regression,Power Failure,0.3137254901960784,1.0,0.47761194029850745,16.0
+raw,none,logistic_regression,Tool Wear Failure,0.05232558139534884,1.0,0.09944751381215469,9.0
+raw,none,random_forest,Heat Dissipation Failure,0.7916666666666666,0.9047619047619048,0.8444444444444444,21.0
+raw,none,random_forest,Multiple Failures,1.0,0.25,0.4,4.0
+raw,none,random_forest,No Failure,0.9897119341563786,0.9953440248318676,0.9925199896827444,1933.0
+raw,none,random_forest,Overstrain Failure,0.9230769230769231,0.75,0.8275862068965517,16.0
+raw,none,random_forest,Power Failure,0.75,0.75,0.75,16.0
+raw,none,random_forest,Tool Wear Failure,0.0,0.0,0.0,9.0
+raw,none,xgboost,Heat Dissipation Failure,0.7916666666666666,0.9047619047619048,0.8444444444444444,21.0
+raw,none,xgboost,Multiple Failures,1.0,0.5,0.6666666666666666,4.0
+raw,none,xgboost,No Failure,0.9942378208486118,0.9818934299017071,0.9880270692347736,1933.0
+raw,none,xgboost,Overstrain Failure,0.6818181818181818,0.9375,0.7894736842105263,16.0
+raw,none,xgboost,Power Failure,0.7272727272727273,1.0,0.8421052631578947,16.0
+raw,none,xgboost,Tool Wear Failure,0.05,0.1111111111111111,0.06896551724137931,9.0
+raw,smote,logistic_regression,Heat Dissipation Failure,0.2638888888888889,0.9047619047619048,0.40860215053763443,21.0
+raw,smote,logistic_regression,Multiple Failures,0.2857142857142857,0.5,0.36363636363636365,4.0
+raw,smote,logistic_regression,No Failure,0.9994107248084856,0.8773926539058459,0.934435261707989,1933.0
+raw,smote,logistic_regression,Overstrain Failure,0.3939393939393939,0.8125,0.5306122448979592,16.0
+raw,smote,logistic_regression,Power Failure,0.3409090909090909,0.9375,0.5,16.0
+raw,smote,logistic_regression,Tool Wear Failure,0.0547945205479452,0.8888888888888888,0.1032258064516129,9.0
+raw,smote,random_forest,Heat Dissipation Failure,0.7241379310344828,1.0,0.84,21.0
+raw,smote,random_forest,Multiple Failures,0.3333333333333333,0.5,0.4,4.0
+raw,smote,random_forest,No Failure,0.9941239316239316,0.9627521986549405,0.9781865965834429,1933.0
+raw,smote,random_forest,Overstrain Failure,0.5833333333333334,0.875,0.7,16.0
+raw,smote,random_forest,Power Failure,0.5416666666666666,0.8125,0.65,16.0
+raw,smote,random_forest,Tool Wear Failure,0.045454545454545456,0.2222222222222222,0.07547169811320754,9.0
+raw,smote,xgboost,Heat Dissipation Failure,0.84,1.0,0.9130434782608695,21.0
+raw,smote,xgboost,Multiple Failures,0.6666666666666666,0.5,0.5714285714285714,4.0
+raw,smote,xgboost,No Failure,0.9957446808510638,0.9684428349715468,0.981904012588513,1933.0
+raw,smote,xgboost,Overstrain Failure,0.64,1.0,0.7804878048780488,16.0
+raw,smote,xgboost,Power Failure,0.6818181818181818,0.9375,0.7894736842105263,16.0
+raw,smote,xgboost,Tool Wear Failure,0.045454545454545456,0.2222222222222222,0.07547169811320754,9.0
+raw,borderline_smote,logistic_regression,Heat Dissipation Failure,0.2878787878787879,0.9047619047619048,0.4367816091954023,21.0
+raw,borderline_smote,logistic_regression,Multiple Failures,0.3333333333333333,0.5,0.4,4.0
+raw,borderline_smote,logistic_regression,No Failure,0.9982808022922636,0.901189860320745,0.9472539423599783,1933.0
+raw,borderline_smote,logistic_regression,Overstrain Failure,0.40625,0.8125,0.5416666666666666,16.0
+raw,borderline_smote,logistic_regression,Power Failure,0.5161290322580645,1.0,0.6808510638297872,16.0
+raw,borderline_smote,logistic_regression,Tool Wear Failure,0.05042016806722689,0.6666666666666666,0.09375,9.0
+raw,borderline_smote,random_forest,Heat Dissipation Failure,0.7,1.0,0.8235294117647058,21.0
+raw,borderline_smote,random_forest,Multiple Failures,0.6666666666666666,0.5,0.5714285714285714,4.0
+raw,borderline_smote,random_forest,No Failure,0.9921630094043887,0.9824107604759441,0.9872628021835196,1933.0
+raw,borderline_smote,random_forest,Overstrain Failure,0.631578947368421,0.75,0.6857142857142857,16.0
+raw,borderline_smote,random_forest,Power Failure,0.5909090909090909,0.8125,0.6842105263157895,16.0
+raw,borderline_smote,random_forest,Tool Wear Failure,0.0,0.0,0.0,9.0
+raw,borderline_smote,xgboost,Heat Dissipation Failure,0.9130434782608695,1.0,0.9545454545454546,21.0
+raw,borderline_smote,xgboost,Multiple Failures,1.0,0.5,0.6666666666666666,4.0
+raw,borderline_smote,xgboost,No Failure,0.9953027139874739,0.9865494050698397,0.9909067290205248,1933.0
+raw,borderline_smote,xgboost,Overstrain Failure,0.7272727272727273,1.0,0.8421052631578947,16.0
+raw,borderline_smote,xgboost,Power Failure,0.8,1.0,0.8888888888888888,16.0
+raw,borderline_smote,xgboost,Tool Wear Failure,0.0,0.0,0.0,9.0
+raw,smote_tomek,logistic_regression,Heat Dissipation Failure,0.2638888888888889,0.9047619047619048,0.40860215053763443,21.0
+raw,smote_tomek,logistic_regression,Multiple Failures,0.2857142857142857,0.5,0.36363636363636365,4.0
+raw,smote_tomek,logistic_regression,No Failure,0.9994107248084856,0.8773926539058459,0.934435261707989,1933.0
+raw,smote_tomek,logistic_regression,Overstrain Failure,0.3939393939393939,0.8125,0.5306122448979592,16.0
+raw,smote_tomek,logistic_regression,Power Failure,0.3409090909090909,0.9375,0.5,16.0
+raw,smote_tomek,logistic_regression,Tool Wear Failure,0.0547945205479452,0.8888888888888888,0.1032258064516129,9.0
+raw,smote_tomek,random_forest,Heat Dissipation Failure,0.7241379310344828,1.0,0.84,21.0
+raw,smote_tomek,random_forest,Multiple Failures,0.3333333333333333,0.5,0.4,4.0
+raw,smote_tomek,random_forest,No Failure,0.9941239316239316,0.9627521986549405,0.9781865965834429,1933.0
+raw,smote_tomek,random_forest,Overstrain Failure,0.5833333333333334,0.875,0.7,16.0
+raw,smote_tomek,random_forest,Power Failure,0.5416666666666666,0.8125,0.65,16.0
+raw,smote_tomek,random_forest,Tool Wear Failure,0.045454545454545456,0.2222222222222222,0.07547169811320754,9.0
+raw,smote_tomek,xgboost,Heat Dissipation Failure,0.84,1.0,0.9130434782608695,21.0
+raw,smote_tomek,xgboost,Multiple Failures,0.6666666666666666,0.5,0.5714285714285714,4.0
+raw,smote_tomek,xgboost,No Failure,0.9957446808510638,0.9684428349715468,0.981904012588513,1933.0
+raw,smote_tomek,xgboost,Overstrain Failure,0.64,1.0,0.7804878048780488,16.0
+raw,smote_tomek,xgboost,Power Failure,0.6818181818181818,0.9375,0.7894736842105263,16.0
+raw,smote_tomek,xgboost,Tool Wear Failure,0.045454545454545456,0.2222222222222222,0.07547169811320754,9.0
+engineered,none,logistic_regression,Heat Dissipation Failure,1.0,1.0,1.0,21.0
+engineered,none,logistic_regression,Multiple Failures,1.0,1.0,1.0,4.0
+engineered,none,logistic_regression,No Failure,1.0,0.9239524055871702,0.9604732454961011,1933.0
+engineered,none,logistic_regression,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,none,logistic_regression,Power Failure,1.0,1.0,1.0,16.0
+engineered,none,logistic_regression,Tool Wear Failure,0.057692307692307696,1.0,0.10909090909090909,9.0
+engineered,none,random_forest,Heat Dissipation Failure,0.9130434782608695,1.0,0.9545454545454546,21.0
+engineered,none,random_forest,Multiple Failures,1.0,0.5,0.6666666666666666,4.0
+engineered,none,random_forest,No Failure,0.9958376690946931,0.9901707190894982,0.9929961089494164,1933.0
+engineered,none,random_forest,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,none,random_forest,Power Failure,1.0,1.0,1.0,16.0
+engineered,none,random_forest,Tool Wear Failure,0.05,0.1111111111111111,0.06896551724137931,9.0
+engineered,none,xgboost,Heat Dissipation Failure,0.9545454545454546,1.0,0.9767441860465116,21.0
+engineered,none,xgboost,Multiple Failures,0.75,0.75,0.75,4.0
+engineered,none,xgboost,No Failure,0.9953125,0.9886187273667874,0.9919543213080716,1933.0
+engineered,none,xgboost,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,none,xgboost,Power Failure,1.0,0.9375,0.967741935483871,16.0
+engineered,none,xgboost,Tool Wear Failure,0.0,0.0,0.0,9.0
+engineered,smote,logistic_regression,Heat Dissipation Failure,1.0,1.0,1.0,21.0
+engineered,smote,logistic_regression,Multiple Failures,1.0,1.0,1.0,4.0
+engineered,smote,logistic_regression,No Failure,1.0,0.9280910501810657,0.9627045881405957,1933.0
+engineered,smote,logistic_regression,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,smote,logistic_regression,Power Failure,1.0,1.0,1.0,16.0
+engineered,smote,logistic_regression,Tool Wear Failure,0.060810810810810814,1.0,0.11464968152866242,9.0
+engineered,smote,random_forest,Heat Dissipation Failure,0.9130434782608695,1.0,0.9545454545454546,21.0
+engineered,smote,random_forest,Multiple Failures,1.0,0.5,0.6666666666666666,4.0
+engineered,smote,random_forest,No Failure,0.9962943356273161,0.9736161407139162,0.9848246991104134,1933.0
+engineered,smote,random_forest,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,smote,random_forest,Power Failure,1.0,1.0,1.0,16.0
+engineered,smote,random_forest,Tool Wear Failure,0.03773584905660377,0.2222222222222222,0.06451612903225806,9.0
+engineered,smote,xgboost,Heat Dissipation Failure,0.9545454545454546,1.0,0.9767441860465116,21.0
+engineered,smote,xgboost,Multiple Failures,1.0,0.75,0.8571428571428571,4.0
+engineered,smote,xgboost,No Failure,0.9963312368972747,0.983445421624418,0.9898463941681853,1933.0
+engineered,smote,xgboost,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,smote,xgboost,Power Failure,1.0,1.0,1.0,16.0
+engineered,smote,xgboost,Tool Wear Failure,0.058823529411764705,0.2222222222222222,0.09302325581395349,9.0
+engineered,borderline_smote,logistic_regression,Heat Dissipation Failure,1.0,1.0,1.0,21.0
+engineered,borderline_smote,logistic_regression,Multiple Failures,1.0,1.0,1.0,4.0
+engineered,borderline_smote,logistic_regression,No Failure,0.9988998899889989,0.9394723228142783,0.9682751266328979,1933.0
+engineered,borderline_smote,logistic_regression,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,borderline_smote,logistic_regression,Power Failure,1.0,1.0,1.0,16.0
+engineered,borderline_smote,logistic_regression,Tool Wear Failure,0.056451612903225805,0.7777777777777778,0.10526315789473684,9.0
+engineered,borderline_smote,random_forest,Heat Dissipation Failure,0.9130434782608695,1.0,0.9545454545454546,21.0
+engineered,borderline_smote,random_forest,Multiple Failures,1.0,0.5,0.6666666666666666,4.0
+engineered,borderline_smote,random_forest,No Failure,0.9957872564507636,0.9782721158820487,0.9869519832985386,1933.0
+engineered,borderline_smote,random_forest,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,borderline_smote,random_forest,Power Failure,1.0,1.0,1.0,16.0
+engineered,borderline_smote,random_forest,Tool Wear Failure,0.023255813953488372,0.1111111111111111,0.038461538461538464,9.0
+engineered,borderline_smote,xgboost,Heat Dissipation Failure,0.9130434782608695,1.0,0.9545454545454546,21.0
+engineered,borderline_smote,xgboost,Multiple Failures,1.0,0.5,0.6666666666666666,4.0
+engineered,borderline_smote,xgboost,No Failure,0.9953100573215217,0.9881013967925505,0.9916926272066459,1933.0
+engineered,borderline_smote,xgboost,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,borderline_smote,xgboost,Power Failure,1.0,1.0,1.0,16.0
+engineered,borderline_smote,xgboost,Tool Wear Failure,0.0,0.0,0.0,9.0
+engineered,smote_tomek,logistic_regression,Heat Dissipation Failure,1.0,1.0,1.0,21.0
+engineered,smote_tomek,logistic_regression,Multiple Failures,1.0,1.0,1.0,4.0
+engineered,smote_tomek,logistic_regression,No Failure,1.0,0.9280910501810657,0.9627045881405957,1933.0
+engineered,smote_tomek,logistic_regression,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,smote_tomek,logistic_regression,Power Failure,1.0,1.0,1.0,16.0
+engineered,smote_tomek,logistic_regression,Tool Wear Failure,0.060810810810810814,1.0,0.11464968152866242,9.0
+engineered,smote_tomek,random_forest,Heat Dissipation Failure,0.9130434782608695,1.0,0.9545454545454546,21.0
+engineered,smote_tomek,random_forest,Multiple Failures,1.0,0.5,0.6666666666666666,4.0
+engineered,smote_tomek,random_forest,No Failure,0.9962943356273161,0.9736161407139162,0.9848246991104134,1933.0
+engineered,smote_tomek,random_forest,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,smote_tomek,random_forest,Power Failure,1.0,1.0,1.0,16.0
+engineered,smote_tomek,random_forest,Tool Wear Failure,0.03773584905660377,0.2222222222222222,0.06451612903225806,9.0
+engineered,smote_tomek,xgboost,Heat Dissipation Failure,0.9545454545454546,1.0,0.9767441860465116,21.0
+engineered,smote_tomek,xgboost,Multiple Failures,1.0,0.75,0.8571428571428571,4.0
+engineered,smote_tomek,xgboost,No Failure,0.9963312368972747,0.983445421624418,0.9898463941681853,1933.0
+engineered,smote_tomek,xgboost,Overstrain Failure,1.0,1.0,1.0,16.0
+engineered,smote_tomek,xgboost,Power Failure,1.0,1.0,1.0,16.0
+engineered,smote_tomek,xgboost,Tool Wear Failure,0.058823529411764705,0.2222222222222222,0.09302325581395349,9.0

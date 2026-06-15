@@ -1,0 +1,7 @@
+,Heat Dissipation Failure,Multiple Failures,No Failure,Overstrain Failure,Power Failure,Tool Wear Failure
+Heat Dissipation Failure,21,0,0,0,0,0
+Multiple Failures,0,4,0,0,0,0
+No Failure,0,0,1794,0,0,139
+Overstrain Failure,0,0,0,16,0,0
+Power Failure,0,0,0,0,16,0
+Tool Wear Failure,0,0,0,0,0,9
