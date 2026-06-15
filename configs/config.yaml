@@ -40,5 +40,5 @@ models:
 
 # Quality gates
 quality_gates:
-  min_f1_macro: 0.60
+  min_f1_macro: 0.61
   min_balanced_accuracy: 0.65

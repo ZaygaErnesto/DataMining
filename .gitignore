@@ -31,11 +31,5 @@ data/processed/
 # DVC
 /dvc.lock
 
-# Metrics (generated)
-metrics/
-
-# Artifacts output
-artifacts/
-
 # Jupyter checkpoints
 .ipynb_checkpoints/
